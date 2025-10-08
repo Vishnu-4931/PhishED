@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Payment - pishEd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for Inter font and smooth transitions */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .modal-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      inset: 0; /* Cover the entire viewport */
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .modal-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content-box {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      max-width: 90%;
+      width: 450px;
+      text-align: center;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+    .modal-overlay.show .modal-content-box {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Common Header -->
+  <nav class="bg-blue-800 text-white p-4 shadow-lg">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold mb-2 sm:mb-0 hover:text-blue-200 transition duration-300">pishEd</a>
+      <div class="flex flex-wrap justify-center space-x-4">
+        <a href="index.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded">Home</a>
+        <a href="simulate.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded">Simulate</a>
+        <a href="quiz.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded">Quiz</a>
+        <a href="learn.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded">Learn</a>
+        <a href="phish-builder.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded">Phish Builder</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-md mx-auto p-4 flex-grow flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full text-center">
+      <div class="mb-6">
+        <p class="text-gray-700 text-lg mb-2">📱 Scan to login</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://o90knexo7r.loclx.io/fake-qr-login.html&size=200x200" alt="QR Code" class="mx-auto border border-gray-300 rounded-md shadow-sm">
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800 mb-4">Secure Payment</h1>
+      <p class="text-gray-600 mb-6">Enter your details to proceed:</p>
+      <input type="email" placeholder="Email Address" class="w-full p-3 border border-gray-300 rounded-md mb-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="password" placeholder="Password" class="w-full p-3 border border-gray-300 rounded-md mb-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="text" placeholder="Card Number" maxlength="19" class="w-full p-3 border border-gray-300 rounded-md mb-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="text" placeholder="MM/YY" maxlength="5" class="w-full p-3 border border-gray-300 rounded-md mb-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <input type="text" placeholder="CVV" maxlength="4" class="w-full p-3 border border-gray-300 rounded-md mb-6 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      <button onclick="showWarning()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 w-full transition-colors-transform hover:translate-y-[-2px] hover:shadow-md">
+        Pay Now
+      </button>
+    </div>
+  </main>
+
+  <!-- Common Footer -->
+  <footer class="bg-gray-900 text-white text-center p-4 mt-auto shadow-inner">
+    <p class="text-sm">&copy; 2025 pishEd | Promoting Digital Literacy for a Safer World</p>
+    <p class="text-xs mt-1">Aligned with SDG 4: Quality Education</p>
+  </footer>
+
+  <!-- Global Feedback Modal (replicated for standalone page functionality) -->
+  <div id="global-feedback-modal-overlay" class="modal-overlay">
+    <div class="modal-content-box">
+      <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
+      <p id="modal-message" class="text-gray-700 mb-6"></p>
+      <button onclick="closeModal('global-feedback-modal-overlay')"
+              class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors-transform hover:translate-y-[-2px] hover:shadow-md">
+        Got It!
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function showGlobalFeedbackModal(title, message, isPhish) {
+      const modalOverlay = document.getElementById('global-feedback-modal-overlay');
+      const modalTitle = document.getElementById('modal-title');
+      const modalMessage = document.getElementById('modal-message');
+
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+
+      if (isPhish) {
+        modalTitle.classList.remove('text-green-700');
+        modalTitle.classList.add('text-red-700');
+      } else {
+        modalTitle.classList.remove('text-red-700');
+        modalTitle.classList.add('text-green-700');
+      }
+
+      modalOverlay.classList.add('show');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    function showWarning() {
+      showGlobalFeedbackModal(
+        '🚨 Warning: Phishing Scam!',
+        'This is a fake payment page. Never enter credentials or card details on suspicious links or after scanning unknown QR codes!',
+        true
+      );
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Email Builder - pishEd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for Inter font and subtle transitions */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a202c; /* Tailwind gray-900 or custom dark */
+      color: #e2e8f0; /* Light gray text for dark background */
+      /* Optional: Subtle background pattern for techy feel */
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+    .transition-colors-transform {
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .email-box p {
+        white-space: pre-wrap; /* Preserve line breaks in body */
+    }
+    .loading-indicator {
+        display: none;
+        margin-top: 1rem;
+        color: #63b3ed; /* Tailwind blue-400 for loading */
+        font-weight: 600;
+    }
+    .loading-indicator.show {
+        display: block;
+    }
+    /* Styles for scroll-triggered animations */
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .scroll-animate.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Blink animation (removed from header, but kept if needed elsewhere) */
+    .blink {
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    /* Styling for the AI analysis text block */
+    .ai-analysis-report {
+        margin-top: 0.5rem;
+        color: #cbd5e1; /* Tailwind gray-300 for report text */
+        line-height: 1.5;
+        font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+  <nav class="bg-blue-900 text-white p-4 shadow-lg">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold mb-2 sm:mb-0 hover:text-blue-200 transition duration-300" aria-label="Navigate to pishEd Home" tabindex="0">pishEd</a>
+      <div class="flex flex-wrap gap-4 text-sm sm:text-base">
+        <a href="index.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Home page" tabindex="0">Home</a>
+        <a href="simulate.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Simulate page" tabindex="0">Simulate</a>
+        <a href="quiz.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Quiz page" tabindex="0">Quiz</a>
+        <a href="learn.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Learn page" tabindex="0">Learn</a>
+        <a href="phish-builder.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Phish Builder page" tabindex="0">Phish Builder</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white text-center py-12 px-4">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-3">Phishing Email Builder</h1>
+    <p class="text-lg md:text-xl font-light mt-2">Understand attacker tactics by crafting your own simulated phishing emails (for educational purposes only).</p>
+    <!-- Removed alert box here -->
+  </header>
+
+  <main class="max-w-4xl mx-auto py-8 px-4 flex-grow">
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate border border-gray-700">
+      <h2 class="text-2xl md:text-3xl font-bold text-blue-400 mb-4">✉️ Create Your Phishing Email</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">Fill in the details below to construct a sample phishing email. Pay attention to how small details can make a difference!</p>
+
+      <div class="mb-4">
+        <label for="fromName" class="block text-gray-200 font-semibold mb-2">From Name:</label>
+        <input type="text" id="fromName" placeholder="e.g., PayPal Support, Your Bank" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" aria-label="Enter from name" tabindex="0">
+      </div>
+
+      <div class="mb-4">
+        <label for="fromEmail" class="block text-gray-200 font-semibold mb-2">From Email Address:</label>
+        <input type="email" id="fromEmail" placeholder="e.g., service@paypa1.com, security@bank-update.info" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" aria-label="Enter from email address" tabindex="0">
+      </div>
+
+      <div class="mb-4">
+        <label for="subject" class="block text-gray-200 font-semibold mb-2">Subject Line:</label>
+        <input type="text" id="subject" placeholder="e.g., Urgent: Account Suspended, Your Payment Is Overdue" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" aria-label="Enter subject line" tabindex="0">
+      </div>
+
+      <div class="mb-4">
+        <label for="body" class="block text-gray-200 font-semibold mb-2">Email Body (include a fake link like `https://malicious.link`):</label>
+        <textarea id="body" rows="8" placeholder="e.g., Dear user, we've detected unusual activity. Click here to verify: https://malicious.link" class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" aria-label="Enter email body" tabindex="0"></textarea>
+      </div>
+
+      <div id="form-feedback" class="text-red-400 text-sm mb-4 hidden">Please fill in all fields to create your email.</div>
+
+      <div class="flex flex-col sm:flex-row gap-4 mt-6">
+        <button onclick="sendToInbox()" class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg" aria-label="Send to simulation inbox" tabindex="0">Send to Simulation Inbox</button>
+        <button onclick="loadExample()" class="flex-1 bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-gray-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg" aria-label="Load example phish" tabindex="0">Load Example Phish</button>
+        <button onclick="resetForm()" class="flex-1 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-red-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg" aria-label="Reset form and inbox" tabindex="0">Reset</button>
+      </div>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg scroll-animate border border-gray-700">
+      <h2 class="text-2xl md:text-3xl font-bold text-blue-400 mb-4">📥 Simulation Inbox (Local)</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">Emails you create will appear here. This is a local simulation, not a real email system. You can then analyze them using AI!</p>
+      <div id="inbox" class="space-y-4">
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-white text-center p-4 mt-auto shadow-inner">
+    <p class="text-sm">© 2025 pishEd | Promoting Digital Literacy for a Safer World</p>
+    <p class="text-xs mt-1">Aligned with SDG 4: Quality Education</p>
+  </footer>
+
+  <script>
+    // IMPORTANT: Replace 'YOUR_GEMINI_API_KEY' with your actual Gemini API Key.
+    // For production, you should use a backend server to proxy API requests
+    // to keep your API key secure and not expose it client-side.
+    const GEMINI_API_KEY = "AIzaSyCLN1pz1C04VHn_8U_f9I7Fs2NTo1Vq8Rw";
+
+    document.getElementById("fromName").focus();
+
+    async function analyzePhishWithAI(fromEmail, subject, body, emailDiv, analyzeButton) {
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.className = 'loading-indicator show text-center text-indigo-400 mt-4';
+      loadingIndicator.textContent = 'Analyzing with AI... Please wait.';
+      emailDiv.appendChild(loadingIndicator);
+      analyzeButton.disabled = true;
+
+      // Modified prompt to request a concise summary paragraph
+      const prompt = `Analyze the following email for potential phishing indicators. Provide a very concise summary (1-3 sentences) of the most critical red flags and a single, clear safety recommendation. Focus on the most obvious and dangerous aspects.
+
+      From Name: ${fromEmail.split('@')[0]}
+      From Email: ${fromEmail}
+      Subject: ${subject}
+      Body:
+      ${body}
+
+      Format your response as a single paragraph. Start with 'AI Analysis: '`;
+
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: prompt
+              }]
+            }]
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("API Error:", errorData);
+          throw new Error(`API error: ${response.status} - ${errorData.error.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        let aiAnalysis = data.candidates[0]?.content?.parts[0]?.text || "No specific analysis could be generated. This might be due to API limits or content safety policies.";
+        
+        // Remove "AI Analysis:" prefix if present (as requested in prompt)
+        if (aiAnalysis.startsWith('AI Analysis:')) {
+            aiAnalysis = aiAnalysis.substring('AI Analysis:'.length).trim();
+        }
+        
+        const feedbackElement = document.createElement('div');
+        feedbackElement.classList.add('analyze-feedback', 'mt-3', 'pt-2', 'border-t', 'border-dashed', 'border-gray-600', 'text-sm', 'font-semibold', 'text-gray-300');
+        // Display the response directly as a paragraph
+        feedbackElement.innerHTML = `<strong>AI Analysis:</strong> <span class="ai-analysis-report">${aiAnalysis}</span>`;
+        emailDiv.appendChild(feedbackElement);
+
+      } catch (error) {
+        console.error("Error analyzing email:", error);
+        const feedbackElement = document.createElement('div');
+        feedbackElement.classList.add('analyze-feedback', 'mt-3', 'pt-2', 'border-t', 'border-dashed', 'border-gray-600', 'text-sm', 'font-semibold', 'text-red-400');
+        feedbackElement.innerHTML = `<strong>AI Analysis Failed:</strong> Could not get a response. Please check your API key and browser console for errors.`;
+        emailDiv.appendChild(feedbackElement);
+      } finally {
+        loadingIndicator.classList.remove('show');
+        analyzeButton.disabled = false;
+      }
+    }
+
+    function sendToInbox() {
+      const fromName = document.getElementById("fromName").value.trim();
+      const fromEmail = document.getElementById("fromEmail").value.trim();
+      const subject = document.getElementById("subject").value.trim();
+      const body = document.getElementById("body").value.trim();
+      const formFeedback = document.getElementById("form-feedback");
+
+      if (!fromName || !fromEmail || !subject || !body) {
+        formFeedback.classList.remove("hidden");
+        return;
+      } else {
+        formFeedback.classList.add("hidden");
+      }
+
+      const inbox = document.getElementById("inbox");
+      const emailDiv = document.createElement("div");
+      emailDiv.classList.add("email-box", "bg-gray-700", "p-4", "rounded-lg", "border-l-4", "border-blue-500", "shadow-sm", "relative");
+      emailDiv.innerHTML = `
+        <p class="text-gray-100 mb-1"><strong>From:</strong> ${fromName} &lt;<span class="text-blue-300">${fromEmail}</span>&gt;</p>
+        <p class="text-gray-100 mb-3"><strong>Subject:</strong> ${subject}</p>
+        <p class="text-gray-200 leading-relaxed mb-4">${body}</p>
+        <button class="analyze-btn bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-600 transition-colors-transform" aria-label="Analyze this email with AI" tabindex="0">
+          Analyze This Email with AI
+        </button>
+      `;
+      inbox.prepend(emailDiv);
+
+      // Attach event listener to the newly created button
+      const analyzeButton = emailDiv.querySelector('.analyze-btn');
+      analyzeButton.addEventListener('click', () => {
+        analyzePhishWithAI(fromEmail, subject, body, emailDiv, analyzeButton);
+        console.log(`Analyzing email from ${fromEmail} at ${new Date().toLocaleTimeString('en-IN', { hour12: true })}`);
+      });
+
+      // Clear form
+      document.getElementById("fromName").value = "";
+      document.getElementById("fromEmail").value = "";
+      document.getElementById("subject").value = "";
+      document.getElementById("body").value = "";
+      document.getElementById("fromName").focus();
+    }
+
+    function loadExample() {
+      document.getElementById("fromName").value = "PayPal Security";
+      document.getElementById("fromEmail").value = "service@payypal.com"; // Intentional typo
+      document.getElementById("subject").value = "Urgent: Your Account Has Been Limited";
+      document.getElementById("body").value = "Dear Customer,\n\nWe have detected unusual activity on your PayPal account. For your security, we have temporarily limited access to your account.\n\nPlease click on the link below to verify your account and restore full access immediately:\n\nhttps://verify.payypal.com/login?id=youraccount\n\nIf you do not complete this verification within 24 hours, your account will be permanently suspended.\n\nThank you,\nPayPal Security Team";
+      document.getElementById("form-feedback").classList.add("hidden"); // Hide feedback if example loads
+      console.log("Example phish loaded at " + new Date().toLocaleTimeString('en-IN', { hour12: true }));
+    }
+
+    function resetForm() {
+      document.getElementById("fromName").value = "";
+      document.getElementById("fromEmail").value = "";
+      document.getElementById("subject").value = "";
+      document.getElementById("body").value = "";
+      document.getElementById("inbox").innerHTML = "";
+      document.getElementById("form-feedback").classList.add("hidden");
+      document.getElementById("fromName").focus();
+      console.log("Form and inbox reset at " + new Date().toLocaleTimeString('en-IN', { hour12: true }));
+    }
+
+    // Intersection Observer for scroll animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // Trigger when 10% of the element is visible
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target); // Stop observing once animated
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.scroll-animate').forEach(section => {
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+</html>
