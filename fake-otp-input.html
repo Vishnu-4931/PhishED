@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Account - Security Check</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f2f5; /* Light gray background */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    .otp-box {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .feedback {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .feedback.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="otp-box">
+    <h1 class="text-3xl font-bold text-blue-700 mb-4">Security Verification</h1>
+    <p class="text-gray-600 mb-6">Please enter the One-Time Password (OTP) sent to your registered mobile number to verify your identity.</p>
+
+    <div class="mb-6">
+      <input type="text" id="otp-input" placeholder="Enter OTP" maxlength="6" class="w-full p-3 border-2 border-gray-300 rounded-lg text-center text-xl tracking-wider focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200" aria-label="Enter OTP">
+    </div>
+
+    <button onclick="submitOtp()" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 shadow-md w-full" aria-label="Submit OTP">
+      Verify
+    </button>
+
+    <div id="otp-feedback" class="feedback"></div>
+  </main>
+
+
+  <script>
+    let correctOtp = null; // This will be loaded from localStorage
+    let simulationId = 'sms-otp'; // Default ID for this simulation
+
+    // Function to send feedback to the parent window (simulate.html)
+    function sendFeedbackToParent(title, message, isPhish, simId) {
+      // Store feedback in localStorage for the parent to pick up
+      localStorage.setItem('simulationFeedback', JSON.stringify({ title, message, isPhish, simulationId: simId }));
+      // Close this tab after a short delay
+      setTimeout(() => {
+        window.close(); // Or window.location.href = 'simulate.html'; if window.close() is blocked
+      }, 50000); // Reduced delay to 200ms
+    }
+
+    // Load OTP and simulation ID from localStorage on page load
+    window.onload = function() {
+      const storedOtp = localStorage.getItem('currentOtp');
+      if (storedOtp) {
+        correctOtp = storedOtp;
+        console.log("OTP loaded:", correctOtp);
+      } else {
+        // Fallback if OTP not found (e.g., page opened directly)
+        correctOtp = '123456'; // Provide a default for testing
+        console.warn("OTP not found in localStorage, using default for testing.");
+      }
+      
+      const storedSimId = localStorage.getItem('currentSimulationId');
+      if (storedSimId) {
+          simulationId = storedSimId;
+      }
+      localStorage.removeItem('currentOtp'); // Clean up OTP from localStorage
+      localStorage.removeItem('currentSimulationId'); // Clean up sim ID from localStorage
+    };
+
+    function submitOtp() {
+      const otpInput = document.getElementById('otp-input').value.trim();
+      const feedbackElement = document.getElementById('otp-feedback');
+
+      let feedbackTitle;
+      let feedbackMessage;
+      let isPhish = true; // Engaging with this page is always a phishing interaction
+
+      if (otpInput === String(correctOtp)) {
+        feedbackTitle = '✅ OTP Verified (Simulated)';
+        feedbackMessage = 'You entered the correct OTP. In a real phishing attack, this would have granted attackers access to your account.';
+        feedbackElement.classList.add('bg-green-100', 'border', 'border-green-500', 'text-green-800');
+        feedbackElement.classList.remove('bg-red-100', 'border-red-500', 'text-red-800');
+      } else {
+        feedbackTitle = '🚨 Incorrect OTP';
+        feedbackMessage = 'Even an incorrect OTP input on a fake page means you\'ve engaged with a scam. Never enter OTPs on unverified sites.';
+        feedbackElement.classList.add('bg-red-100', 'border', 'border-red-500', 'text-red-800');
+        feedbackElement.classList.remove('bg-green-100', 'border-green-500', 'text-green-800');
+      }
+
+      feedbackElement.innerHTML = `<strong>${feedbackTitle}</strong><br>${feedbackMessage}`;
+      feedbackElement.classList.add('show');
+
+      // Send feedback to parent and close tab
+      sendFeedbackToParent(
+        '🚨 Warning: OTP Phishing Attempt!',
+        'You were lured to a fake OTP verification page. Never enter OTPs unless you initiated the transaction on a verified platform. Always be suspicious of unsolicited OTP requests.',
+        true, // This is always a phishing warning
+        simulationId
+      );
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Simulation - pishEd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for Inter font and smooth transitions */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a202c; /* Tailwind gray-900 or custom dark */
+      color: #e2e8f0; /* Light gray text for dark background */
+      /* Optional: Subtle background pattern for techy feel */
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+    .modal-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      inset: 0; /* Cover the entire viewport */
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .modal-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content-box {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      max-width: 90%;
+      width: 450px;
+      text-align: center;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+    .modal-overlay.show .modal-content-box {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    /* New SMS Notification Pop-up */
+    .sms-notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0,0,0,0.8);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column; /* Stack message and link */
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .sms-notification.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .sms-notification .sms-link {
+        color: #90cdf4; /* Tailwind blue-300 */
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    /* Styles for scroll-triggered animations */
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .scroll-animate.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .blink {
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+  <!-- Common Header -->
+  <nav class="bg-blue-900 text-white p-4 shadow-lg">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold mb-2 sm:mb-0 hover:text-blue-200 transition duration-300" aria-label="Navigate to pishEd Home" tabindex="0">pishEd</a>
+      <div class="flex flex-wrap justify-center space-x-4">
+        <a href="index.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Home page" tabindex="0">Home</a>
+        <a href="simulate.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Simulate page" tabindex="0">Simulate</a>
+        <a href="quiz.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Quiz page" tabindex="0">Quiz</a>
+        <a href="learn.html" class="hover:underline hover:text-blue-200 transition duration-300 px-2 py-1 rounded" aria-label="Navigate to Learn page" tabindex="0">Learn</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white text-center py-12 px-4">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-3">Phishing Simulation</h1>
+    <p class="text-lg md:text-xl font-light mt-2">Learn by experiencing fake attacks in a safe environment.</p>
+    <!-- Removed alert box, progress text, and reset button -->
+  </header>
+
+  <main class="max-w-4xl mx-auto py-8 px-4 flex-grow">
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">📧 Email Phishing Simulation</h2>
+      <div class="border-b border-gray-700 pb-4 mb-4">
+        <p class="text-gray-200"><strong>From:</strong> <span class="text-blue-400">support@amaz0n.com</span></p>
+        <p class="text-gray-200"><strong>Subject:</strong>  Free Gift Card</p>
+      </div>
+      <p class="text-gray-200 leading-relaxed mb-4">Dear Customer,</p>
+      <p class="text-gray-200 leading-relaxed mb-6">You have Won a Free Gift Card.</p>
+      <button
+         class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+         onclick="loadSimulation('fake-offer.html', 'email-phishing')" aria-label="Click to secure your account" tabindex="0">
+        Click here to Claim
+      </button>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">🪟 Pop-Up Phishing Simulation</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">🎁 Claim Your Free iPhone</p>
+      <button
+         class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+         onclick="loadSimulation('fake-iphone.html', 'popup-phishing')" aria-label="Click to claim free iPhone" tabindex="0">
+        Click to Claim
+      </button>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">📱 SMS (Smishing) & OTP Phishing</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">You received an SMS from an unknown number:</p>
+      <button class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+              onclick="triggerSmsOtp()" aria-label="Receive SMS simulation" tabindex="0">
+        Receive SMS
+      </button>
+    </section>
+
+
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">📷 Camera Access Phishing</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">A website is requesting access to your camera to "verify your identity for security purposes."</p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button
+           class="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-green-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+           onclick="loadSimulation('fake-cam.html', 'camera-allow')" aria-label="Allow camera access" tabindex="0">
+          Allow Access
+        </button>
+        <button
+           class="flex-1 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-red-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+           onclick="loadSimulation('fake-cam.html', 'camera-deny')" aria-label="Deny camera access" tabindex="0">
+          Deny Access
+        </button>
+      </div>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">🔒 Ransomware Simulation</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">You've clicked on a malicious link that triggered a simulated ransomware attack.</p>
+      <button
+         class="inline-block bg-red-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-red-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+         onclick="loadSimulation('fake-ransomware.html', 'ransomware-sim')" aria-label="Trigger ransomware page" tabindex="0">
+        Trigger Ransomware Page
+      </button>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">🌐 Fake Browser Update Phishing</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">A pop-up informs you that your browser is outdated and requires an urgent update.</p>
+      <button
+         class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+         onclick="loadSimulation('fake-chrome-update.html', 'chrome-update')" aria-label="Simulate update pop-up" tabindex="0">
+        Simulate Update Pop-up
+      </button>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">🖼️ Malicious Image Download Phishing</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">You're trying to download a photo, but it might come with a hidden surprise.</p>
+      <button
+         class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+         onclick="loadSimulation('fake-image-download.html', 'image-download')" aria-label="Simulate image download" tabindex="0">
+        Simulate Image Download
+      </button>
+    </section>
+
+    
+
+    <!-- New: Phishing via QR Codes (Quishing) Section -->
+    <section class="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 scroll-animate">
+      <h2 class="text-2xl font-semibold text-blue-400 mb-4">📱 QR Code Phishing (Quishing)</h2>
+      <p class="text-gray-200 leading-relaxed mb-6">Scan a QR code that leads to a malicious site or fake offer.</p>
+      <button
+         class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg"
+         onclick="loadSimulation('fake-qr-phishing.html', 'qr-phishing')" aria-label="Simulate QR code phishing" tabindex="0">
+        Scan QR Code
+      </button>
+    </section>
+
+  </main>
+
+  <!-- Common Footer -->
+  <footer class="bg-gray-900 text-white text-center p-4 mt-auto shadow-inner">
+    <p class="text-sm">© 2025 pishEd | Promoting Digital Literacy for a Safer World</p>
+    <p class="text-xs mt-1">Aligned with SDG 4: Quality Education</p>
+  </footer>
+
+  <!-- Global Feedback Modal -->
+  <div id="global-feedback-modal-overlay" class="modal-overlay">
+    <div class="modal-content-box">
+      <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
+      <p id="modal-message" class="text-gray-700 mb-6"></p>
+      <button onclick="closeModal('global-feedback-modal-overlay')"
+              class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 shadow-lg" aria-label="Acknowledge feedback" tabindex="0">
+        Got It!
+      </button>
+    </div>
+  </div>
+
+  <!-- New SMS Notification Pop-up -->
+  <div id="sms-notification-popup" class="sms-notification">
+    <span class="text-xl">💬</span> <span id="sms-notification-text"></span>
+    <a href="javascript:void(0);" onclick="openOtpPage()" class="sms-link">Click here</a>
+  </div>
+
+  <script>
+    let currentOtp = null;
+    let simulationsCompleted = JSON.parse(localStorage.getItem('simulationsCompleted') || '[]');
+    const totalSimulations = 13; // UPDATED: Total number of distinct simulations (8 + 4 new)
+
+    let gdriveTimerInterval;
+
+    // Function to update the progress display
+    function updateProgressDisplay() {
+      // Removed progress display from header as requested
+      // document.getElementById('simulation-progress').textContent = `Completed ${simulationsCompleted.length} of ${totalSimulations} simulations`;
+    }
+
+    // Function to mark a simulation as complete
+    function markSimulationComplete(id) {
+      if (!simulationsCompleted.includes(id)) {
+        simulationsCompleted.push(id);
+        localStorage.setItem('simulationsCompleted', JSON.stringify(simulationsCompleted));
+        updateProgressDisplay(); // Still call to update internal state, even if not displayed
+        console.log(`Simulation ${id} completed at ${new Date().toLocaleTimeString('en-IN', { hour12: true })}`);
+      }
+    }
+
+    // Function to reset simulation progress
+    function resetProgress() {
+      simulationsCompleted = [];
+      localStorage.setItem('simulationsCompleted', JSON.stringify(simulationsCompleted));
+      updateProgressDisplay();
+      console.log("Simulation progress reset at " + new Date().toLocaleTimeString('en-IN', { hour12: true }));
+    }
+
+    // Function to show the global feedback modal
+    function showGlobalFeedbackModal(title, message, isPhish) {
+      const modalOverlay = document.getElementById('global-feedback-modal-overlay');
+      const modalTitle = document.getElementById('modal-title');
+      const modalMessage = document.getElementById('modal-message');
+
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+
+      if (isPhish) {
+        modalTitle.classList.remove('text-green-700');
+        modalTitle.classList.add('text-red-700');
+      } else {
+        modalTitle.classList.remove('text-red-700');
+        modalTitle.classList.add('text-green-700');
+      }
+
+      modalOverlay.classList.add('show');
+    }
+
+    // Function to close any modal (including the global feedback modal)
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    // Function to load simulation in a new tab
+    function loadSimulation(url, simulationId) {
+      localStorage.setItem('currentSimulationId', simulationId);
+      window.open(url, '_blank');
+      console.log(`Loading simulation ${simulationId} in new tab: ${url}`);
+    }
+
+    // Handle feedback from closed simulation tabs via localStorage
+    window.addEventListener('load', () => {
+      const storedFeedback = localStorage.getItem('simulationFeedback');
+      if (storedFeedback) {
+        const { title, message, isPhish, simulationId } = JSON.parse(storedFeedback);
+        showGlobalFeedbackModal(title, message, isPhish);
+        markSimulationComplete(simulationId);
+        localStorage.removeItem('simulationFeedback'); // Clear feedback after showing
+      }
+      updateProgressDisplay(); // Update progress on page load
+    });
+
+    // Function to trigger SMS/OTP simulation
+    function triggerSmsOtp() {
+      const smsNotification = document.getElementById('sms-notification-popup');
+      currentOtp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+      
+      // Set the text for the SMS notification including the OTP and the link
+      document.getElementById('sms-notification-text').innerHTML = `Your OTP is <strong>${currentOtp}</strong>. Do NOT share this code with anyone. <br>To verify, `;
+      
+      smsNotification.classList.add('show');
+      
+      // Store OTP and simulation ID for the new page
+      localStorage.setItem('currentOtp', currentOtp);
+      localStorage.setItem('currentSimulationId', 'sms-otp'); 
+
+      console.log("SMS/OTP simulation triggered, notification shown. OTP: " + currentOtp);
+      // Mark as complete when the notification is shown and link is available
+      markSimulationComplete('sms-otp'); 
+    }
+
+    // Function to open the OTP input page when the link in SMS notification is clicked
+    function openOtpPage() {
+        const smsNotification = document.getElementById('sms-notification-popup');
+        smsNotification.classList.remove('show'); // Hide the notification
+        window.open('fake-otp-input.html', '_blank'); // Open the OTP input page
+        console.log("Opening fake-otp-input.html from SMS notification.");
+    }
+
+    // Google Drive Timer (display only on this page, actual logic in fake-googledrive.html)
+    let gdriveTimeLeft = 30; // Initial value for display
+    gdriveTimerInterval = setInterval(() => {
+        if (gdriveTimeLeft > 0) {
+            gdriveTimeLeft--;
+            const minutes = Math.floor(gdriveTimeLeft / 60);
+            const seconds = gdriveTimeLeft % 60;
+            document.getElementById('gdrive-timer').textContent = `Time left to view: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        } else {
+            document.getElementById('gdrive-timer').textContent = 'Time expired!';
+            clearInterval(gdriveTimerInterval); // Stop interval once expired
+        }
+    }, 1000);
+
+
+    // Reset progress event listener
+    // document.getElementById('reset-progress').addEventListener('click', resetProgress); // Button removed
+
+    // Intersection Observer for scroll animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // Trigger when 10% of the element is visible
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target); // Stop observing once animated
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.scroll-animate').forEach(section => {
+        observer.observe(section);
+      });
+    });
+
+    // Keyboard accessibility
+    document.querySelectorAll('a, button, input').forEach(element => {
+      element.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && element.tagName === 'BUTTON') element.click();
+      });
+    });
+  </script>
+</body>
+</html>

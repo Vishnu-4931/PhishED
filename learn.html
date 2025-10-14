@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn About Phishing | pishEd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a202c;
+      color: #e2e8f0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .scroll-animate.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .email-container {
+      position: relative;
+      background-color: #2d3748;
+      color: #e2e8f0;
+      border: 1px solid #4a5568;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+    .email-container a { color: #63b3ed; }
+    .highlight-area {
+      position: absolute;
+      background-color: rgba(255, 255, 0, 0.4);
+      border: 1px dashed #facc15;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 10;
+    }
+    .highlight-area.active { opacity: 1; }
+    .highlight-area:hover { background-color: rgba(255, 255, 0, 0.6); }
+    .highlight-feedback {
+      background-color: #4a5568;
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 0.375rem;
+      color: #fbd38d;
+      font-size: 0.9rem;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .highlight-feedback.show { display: block; opacity: 1; }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+  <nav class="bg-blue-900 text-white p-4 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold tracking-tight hover:text-blue-200 transition duration-300">pishEd</a>
+      <div class="flex flex-wrap gap-4 text-sm sm:text-base">
+        <a href="index.html" class="hover:underline hover:text-blue-200 transition duration-300">Home</a>
+        <a href="simulate.html" class="hover:underline hover:text-blue-200 transition duration-300">Simulate</a>
+        <a href="quiz.html" class="hover:underline hover:text-blue-200 transition duration-300">Quiz</a>
+        <a href="learn.html" class="hover:underline hover:text-blue-200 transition duration-300">Learn</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white text-center py-12 px-4 shadow-md">
+    <h1 class="text-4xl font-extrabold mb-3">🧠 Learn to Spot Phishing</h1>
+    <p class="text-lg">Your deep dive into how phishing works and how to build a strong defense.</p>
+  </header>
+
+  <main class="max-w-5xl mx-auto py-12 px-4 space-y-16 flex-grow">
+    
+    <section class="bg-gray-800 p-6 rounded-xl shadow-lg scroll-animate border border-gray-700">
+      <h2 class="text-2xl font-bold text-blue-400 mb-4">🎣 What is Phishing?</h2>
+      <p class="mb-4 leading-relaxed text-gray-200">Phishing is a type of cyberattack where criminals send deceptive messages—usually emails or texts—to trick you into revealing sensitive information. Think of it like a digital con artist who pretends to be someone you trust, like your bank, a social media site, or even your boss.</p>
+      <p class="mt-3 text-gray-200">The goal is to fool you into handing over valuable data like passwords, credit card numbers, or one-time passwords (OTPs). Once they have this information, they can use it to steal your money, access your private accounts, or commit identity theft.</p>
+      <div class="mt-5 bg-yellow-900 border-l-4 border-yellow-700 p-4 rounded text-yellow-200 shadow-sm">
+        <strong>💡 Key Tip:</strong> The success of phishing relies on manipulating human psychology. Scammers create a sense of panic or curiosity to make you react instantly without thinking. The best defense is to always take a moment to pause, think critically, and verify before you click or reply.
+      </div>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-xl shadow-lg scroll-animate border border-gray-700">
+      <h2 class="text-2xl font-bold text-blue-400 mb-4 text-center">🚩 Common Phishing Signs</h2>
+      <div class="space-y-6">
+        <div>
+            <h3 class="font-semibold text-red-400">🚨 Urgent Messages & Threats</h3>
+            <p class="text-gray-300 mt-1">Scammers create a false sense of urgency to rush you into making a mistake. They use threatening language like "Your account will be suspended" or "Unauthorized login detected." Real companies rarely use such high-pressure tactics.</p>
+        </div>
+        <div>
+            <h3 class="font-semibold text-red-400">🔗 Suspicious Links & Attachments</h3>
+            <p class="text-gray-300 mt-1">Always inspect links before clicking. On a desktop, hover your mouse over the link to see its true destination in a pop-up. On mobile, press and hold the link. If the web address looks different from what you expect, it's a major red flag.</p>
+        </div>
+        <div>
+            <h3 class="font-semibold text-red-400">✉️ Mismatched Email Addresses & Typos</h3>
+            <p class="text-gray-300 mt-1">Look closely at the sender's email address. Scammers often use domains that are slightly different from the real one, like <code class="bg-gray-700 text-gray-100 rounded px-1">support@paypa1.com</code> (with a "1" instead of "l"). Also watch for spelling and grammar mistakes, as professional organizations usually have high standards for their communications.</p>
+        </div>
+        <div>
+            <h3 class="font-semibold text-red-400">🤫 Unusual Requests for Sensitive Information</h3>
+            <p class="text-gray-300 mt-1">Remember this golden rule: Legitimate companies will almost never ask you to provide your password, full credit card number, or other sensitive data directly in an email. They will always direct you to log in to your account through their official, secure website.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-gray-800 p-8 rounded-xl shadow-lg scroll-animate border border-gray-700">
+        <h2 class="text-3xl font-bold text-blue-400 mb-4 text-center">🔍 Types of Phishing Explained</h2>
+        <p class="mb-8 text-center text-gray-300">Phishing isn't one-size-fits-all. Scammers use many clever tactics. Here’s a detailed look at the most common ones.</p>
+        <div class="space-y-8">
+            <div>
+                <h3 class="text-2xl font-semibold text-blue-300">🎣 Email Phishing (The Classic)</h3>
+                <p class="mt-2 text-gray-300">This is the most widespread method. Attackers send millions of generic emails that appear to be from popular companies, hoping to trap a percentage of users.</p>
+                <p class="mt-2 text-gray-400"><strong>Example:</strong> A mass email from "Netflìx" (notice the accent) claims your subscription has expired and provides a link to update your payment details.</p>
+                <p class="mt-2 text-red-400 font-semibold">Red Flags: Generic greeting, minor typos in the brand name, a sense of urgency.</p>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold text-blue-300">🎯 Spear Phishing</h3>
+                <p class="mt-2 text-gray-300">A targeted attack where the scammer researches the victim first. They use personal details to make the message seem highly credible.</p>
+                <p class="mt-2 text-gray-400"><strong>Example:</strong> An employee receives an email from their "boss" mentioning their name and a recent project, then asking for an urgent fund transfer to a new vendor.</p>
+                <p class="mt-2 text-red-400 font-semibold">Red Flags: An unusual or unexpected request (even if it seems personal), pressure to bypass normal procedures.</p>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold text-blue-300">🐋 Whaling</h3>
+                <p class="mt-2 text-gray-300">A form of spear phishing aimed at senior executives (the "big fish"). These attacks are sophisticated and aim for high-value targets like financial data or trade secrets.</p>
+                <p class="mt-2 text-gray-400"><strong>Example:</strong> A company CFO receives an email that looks like a confidential legal summons from a real law firm, demanding they click a link to view the document.</p>
+                <p class="mt-2 text-red-400 font-semibold">Red Flags: High-pressure language, requests for extreme confidentiality, significant financial or legal implications.</p>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold text-blue-300">📱 Smishing (SMS Phishing)</h3>
+                <p class="mt-2 text-gray-300">Phishing conducted via text messages. People often trust texts more, making this a dangerous attack vector.</p>
+                <p class="mt-2 text-gray-400"><strong>Example:</strong> A text message says, "Your package has a customs fee. Pay at [fake-delivery-link.com] to release it."</p>
+                <p class="mt-2 text-red-400 font-semibold">Red Flags: Unsolicited texts from unknown numbers, URL shorteners (like bit.ly), urgent requests for payment.</p>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold text-blue-300">📞 Vishing (Voice Phishing)</h3>
+                <p class="mt-2 text-gray-300">Scammers use phone calls to impersonate trusted individuals. With modern AI, they can even clone voices to sound more convincing.</p>
+                <p class="mt-2 text-gray-400"><strong>Example:</strong> A caller claiming to be from your bank's fraud department says your card has been compromised and asks you to read out the OTP they just sent you to "verify your identity."</p>
+                <p class="mt-2 text-red-400 font-semibold">Red Flags: The caller asks for your password or OTP (banks never do), they pressure you to act immediately.</p>
+            </div>
+
+             <div>
+                <h3 class="text-2xl font-semibold text-blue-300">🧬 Clone Phishing</h3>
+                <p class="mt-2 text-gray-300">An attacker takes a legitimate, previously delivered email, copies it, and replaces the safe links or attachments with malicious ones. They then resend the "cloned" email.</p>
+                <p class="mt-2 text-gray-400"><strong>Example:</strong> You receive an identical flight confirmation email a day after the real one, but this version claims there is an "update to your itinerary" and asks you to click a new link.</p>
+                <p class="mt-2 text-red-400 font-semibold">Red Flags: The email is an unexpected duplicate of a real message you received; the sender's address is slightly altered.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-xl shadow-lg scroll-animate border border-gray-700">
+      <h2 class="text-2xl font-bold text-blue-400 mb-4">🕵️ Spot the Phish!</h2>
+      <p class="mb-6 text-gray-200">Time to put your knowledge to the test! In the fake email below, several red flags are hidden. Act like a digital detective: click or hover over the different parts of the email to reveal why they are suspicious and learn how to spot these tricks in the wild.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="email-container shadow-md">
+          <h3 class="font-bold text-blue-400 mb-2">✔️ Legit Email</h3>
+          <p><strong class="text-gray-300">From:</strong> <span class="text-blue-300">service@paypal.com</span></p>
+          <p><strong class="text-gray-300">Subject:</strong> Login Activity Detected</p>
+          <hr class="my-3 border-gray-600">
+          <p class="mt-3 text-gray-200">Dear John,</p>
+          <p class="text-gray-200">We noticed a login from a new device. If this was you, no action is needed.</p>
+          <p class="mt-3 text-gray-200">Otherwise, please go to <a class="text-blue-300 underline" href="https://www.paypal.com/myaccount">paypal.com/myaccount</a> to secure your account.</p>
+        </div>
+        <div class="email-container shadow-md border border-red-700">
+          <h3 class="font-bold text-red-400 mb-2">⚠️ Phishing Example</h3>
+          <p><strong class="text-gray-300">From:</strong> <span class="text-red-400">service@paypa1.com</span></p>
+          <p><strong class="text-gray-300">Subject:</strong> Urgent: Account Limited!</p>
+          <hr class="my-3 border-gray-600">
+          <p class="mt-2 text-gray-200">Dear Customer,</p>
+          <p class="text-gray-200">We detected suspicious activty on your PayPal account. To restore access, click below:</p>
+          <p><a href="https://verify.payypal.com/login" class="text-blue-300 underline">verify.payypal.com/login</a></p>
+          <p class="text-gray-200">If you don’t respond in 24 hours, your account will be suspended.</p>
+          <div class="highlight-area" style="top: 50px; left: 10px; width: 180px; height: 20px;" data-feedback="Fake sender address using 'paypa1.com' instead of 'paypal.com'. Check carefully!" tabindex="0"></div>
+          <div class="highlight-area" style="top: 75px; left: 10px; width: 250px; height: 20px;" data-feedback="Urgent language triggers panic. Don’t act without verifying." tabindex="0"></div>
+          <div class="highlight-area" style="top: 130px; left: 180px; width: 100px; height: 20px;" data-feedback="'activty' is a typo. Scammers often overlook grammar." tabindex="0"></div>
+          <div class="highlight-area" style="top: 155px; left: 10px; width: 90%;" data-feedback="Fake URL: 'payypal.com' is not the real PayPal domain. Hover over links before clicking." tabindex="0"></div>
+          <div class="highlight-area" style="top: 180px; left: 10px; width: 90%;" data-feedback="Threat of account suspension = scare tactic to pressure you." tabindex="0"></div>
+        </div>
+      </div>
+      <div id="highlight-feedback-area" class="highlight-feedback mt-6"></div>
+    </section>
+
+    <section class="bg-gray-800 p-6 rounded-xl shadow-lg scroll-animate border border-gray-700">
+      <h2 class="text-2xl font-bold text-blue-400 mb-4">🛡️ How to Stay Safe</h2>
+      <p class="mb-4 text-gray-200">Building good digital habits is the best way to protect yourself. Here are key practices to make part of your routine:</p>
+      <ul class="list-disc pl-6 space-y-3 text-gray-200">
+        <li><strong>Use Strong & Unique Passwords:</strong> Avoid using the same password for multiple websites. If one site is breached, all your accounts become vulnerable. Use a password manager to create and store complex, unique passwords for every account.</li>
+        <li><strong>Enable Two-Factor Authentication (2FA):</strong> 2FA is like having a second lock on your account. Even if a scammer steals your password, they can't log in without access to your phone. Enable it on every service that offers it.</li>
+        <li><strong>Think Before You Click:</strong> Make it a habit to be skeptical of unsolicited messages. Whether it's a link or an attachment, always pause and ask yourself if you were expecting it and if the source is trustworthy.</li>
+        <li><strong>Verify Independently:</strong> If you receive a worrying message from your bank or another service, don't use the contact information or links in the message. Instead, open a new browser tab and go to their official website directly, or call them using a number you know is legitimate.</li>
+        <li><strong>Report Phishing Attempts:</strong> If you receive a phishing email, report it. Use the "Report Phishing" or "Report Spam" option in your email client. This helps improve security filters and protects other people from falling for the same scam.</li>
+      </ul>
+    </section>
+
+    <div class="flex flex-wrap justify-center gap-4 mt-10">
+      <a href="quiz.html" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg">🧠 Try a Quiz</a>
+      <a href="index.html" class="bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300 ease-in-out hover:translate-y-[-2px] shadow-lg">🏠 Back to Home</a>
+    </div>
+  </main>
+
+  <footer class="bg-gray-900 text-white text-center p-4 mt-auto shadow-inner">
+    <p class="text-sm">© 2025 pishEd | Promoting Digital Literacy</p>
+    <p class="text-xs mt-1">Aligned with SDG 4: Quality Education</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const highlightAreas = document.querySelectorAll('.highlight-area');
+      const feedbackBox = document.getElementById('highlight-feedback-area');
+
+      highlightAreas.forEach(area => {
+        area.addEventListener('click', () => {
+          highlightAreas.forEach(a => a.classList.remove('active'));
+          area.classList.add('active');
+          feedbackBox.textContent = area.dataset.feedback;
+          feedbackBox.classList.add('show');
+        });
+        area.addEventListener('mouseover', () => {
+          feedbackBox.textContent = area.dataset.feedback;
+          feedbackBox.classList.add('show');
+        });
+        area.addEventListener('mouseout', () => {
+          if (!area.classList.contains('active')) feedbackBox.classList.remove('show');
+        });
+      });
+
+      // Intersection Observer for scroll animations
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.scroll-animate').forEach(section => {
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+</html>

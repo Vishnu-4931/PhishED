@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn to identify phishing scams, practice with interactive simulations, and protect yourself online with pishEd." />
+  <title>pishEd – Learn, Simulate & Defend Against Phishing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for Inter font and general transitions */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a202c; /* Tailwind gray-900 */
+      color: #e2e8f0; /* Light gray text */
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+    /* Styles for scroll-triggered animations */
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .scroll-animate.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Blink animation for alerts */
+    .blink {
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+
+  <nav class="bg-blue-900 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold tracking-tight hover:text-blue-200 transition duration-300">pishEd</a>
+      <div class="flex flex-wrap gap-4 text-sm sm:text-base">
+        <a href="index.html" class="hover:underline hover:text-blue-200 transition duration-300">Home</a>
+        <a href="simulate.html" class="hover:underline hover:text-blue-200 transition duration-300">Simulate</a>
+        <a href="quiz.html" class="hover:underline hover:text-blue-200 transition duration-300">Quiz</a>
+        <a href="learn.html" class="hover:underline hover:text-blue-200 transition duration-300">Learn</a>
+        
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white text-center py-16 px-4 shadow-md">
+    <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight mb-3">Master Phishing Awareness</h1>
+    <p class="text-lg sm:text-xl font-light max-w-3xl mx-auto">Build confidence with safe simulations, interactive quizzes, and clear guides designed to keep you safe online.</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 flex-grow space-y-20">
+    
+    <section class="bg-gray-800 p-8 rounded-xl shadow-lg scroll-animate border border-gray-700">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="md:w-1/2">
+                <h2 class="text-3xl font-bold text-blue-400 mb-4">🎣 What is Phishing?</h2>
+                <p class="mb-4 leading-relaxed text-gray-200">Phishing is a type of cyberattack where criminals pretend to be trusted sources — like your bank, a delivery company, or a social media platform — to trick you into revealing sensitive information such as passwords, bank details, or personal data. Once they gain access, they can steal money, misuse your identity, or compromise your accounts.
+</p>
+                <p class="mb-4 leading-relaxed text-gray-200">These scams are effective because they target human emotions. Attackers often create a sense of urgency (“Your account will be locked soon!”) or excitement (“You’ve won a free gift!”) to pressure you into clicking links or sharing information without thinking twice.
+</p>
+Phishing can take many forms — from emails and text messages (smishing) to phone calls (vishing) and targeted attacks (spear phishing). Recognizing these tactics and staying alert is the first step toward keeping your digital life safe."</p>
+            </div>
+            <div class="md:w-1/2">
+                <img src="1.png" alt="An illustration showing the common signs of a phishing email on a laptop screen." class="rounded-lg shadow-lg w-full h-auto">
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-gray-800 p-8 rounded-xl shadow-lg scroll-animate border border-gray-700">
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-blue-400 mb-4">🌟 Why pishEd?</h2>
+            <p class="max-w-3xl mx-auto text-gray-200">Reading about threats isn't enough. To truly defend yourself, you need to experience them in a safe space and build muscle memory. pishEd is designed as a comprehensive training ground—your personal gym for digital self-defense. We focus on four key pillars of active learning.</p>
+        </div>
+        <div class="mt-8 grid md:grid-cols-2 gap-8">
+            <div class="bg-gray-900 p-6 rounded-lg border border-gray-700">
+                <h3 class="text-xl font-bold text-blue-300 mb-2">🔐 Safe Simulations</h3>
+                <p class="text-gray-300">PhishED lets you explore phishing safely. Each simulation shows how real scams look — from fake emails and login pages to suspicious messages — all without risk. You can interact and see what happens, learning to spot warning signs and understand how attackers trick users. This hands-on practice builds your confidence to stay safe online.</p>
+            </div>
+            <div class="bg-gray-900 p-6 rounded-lg border border-gray-700">
+                <h3 class="text-xl font-bold text-blue-300 mb-2">🧠 Smart Quizzes</h3>
+                <p class="text-gray-300">Our quizzes let you test your phishing awareness in a simple, interactive way. After each question, you see immediate feedback explaining why your answer is correct or incorrect. At the end, a full summary report shows your results and highlights areas to focus on, helping you strengthen your skills step by step.</p>
+            </div>
+            <div class="bg-gray-900 p-6 rounded-lg border border-gray-700">
+                <h3 class="text-xl font-bold text-blue-300 mb-2">📘 Learn the Tactics</h3>
+                <p class="text-gray-300">Learn how scammers try to trick you. Discover common tricks like fake links, urgent messages, and impersonation. Understand how phishing attacks work and why they succeed. Get tips to spot these scams and protect yourself online every day.</p>
+            </div>
+            
+        </div>
+    </section>
+
+    
+
+    <section class="bg-gray-800 p-8 rounded-xl shadow-lg scroll-animate text-center border border-gray-700">
+      <h2 class="text-3xl font-bold text-blue-400 mb-6">🚀 Ready to Practice?</h2>
+      <p class="text-gray-200 mb-6 max-w-3xl mx-auto"></p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <a href="simulate.html" class="bg-blue-600 text-white px-1 py-3 rounded-lg font-semibold hover:bg-blue-700 shadow hover:shadow-lg transition-all duration-300 ease-in-out">🎭 Simulate Phishing</a>
+        <a href="quiz.html" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 shadow hover:shadow-lg transition-all duration-300 ease-in-out">🧠 Take the Quiz</a>
+        <a href="learn.html" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 shadow hover:shadow-lg transition-all duration-300 ease-in-out">📘 Learn More</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-white text-center text-sm py-4 mt-auto shadow-inner">
+    <p>© 2025 pishEd — Promoting Digital Literacy for a Safer World</p>
+    <p class="text-xs mt-1">Aligned with SDG 4: Quality Education</p>
+  </footer>
+
+  <script>
+    // Intersection Observer for scroll animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // Trigger when 10% of the element is visible
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target); // Stop observing once animated
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.scroll-animate').forEach(section => {
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+</html>
